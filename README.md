@@ -1,5 +1,10 @@
 # Solar System · three.js WebGPU + TSL
 
+[![Deploy to GitHub Pages](https://github.com/pearsnow/solar-system/actions/workflows/deploy.yml/badge.svg)](https://github.com/pearsnow/solar-system/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**在线预览 → https://pearsnow.github.io/solar-system/**
+
 一个把精度拉到素材上限的太阳系，用 three.js r187 的 **WebGPU + TSL** 节点管线实现。
 
 不是某个开源项目的复制，而是针对 8 GB 显存和「视觉优先」重新做的取舍：
