@@ -1,3 +1,5 @@
+import { localISODate } from '../sim/clock.js';
+
 /**
  * Time-machine and selection UI.
  *
@@ -78,7 +80,7 @@ export function createUI({ speeds, on }) {
   });
 
   $('tb-today').addEventListener('click', () => {
-    on.date(new Date().toISOString().slice(0, 10));
+    on.date(localISODate());
   });
 
   $('tb-home').addEventListener('click', () => on.home());

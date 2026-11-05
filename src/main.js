@@ -236,7 +236,10 @@ async function main() {
               clock.daysPerSecond = SPEED_PRESETS[index].daysPerSecond;
             },
             date: (iso) => {
-              clock.setDate(new Date(`${iso}T00:00:00Z`));
+              // No trailing Z: a picked calendar date means local midnight, the
+              // same frame the display uses. Parsing it as UTC midnight would
+              // show the previous date west of Greenwich.
+              clock.setDate(new Date(`${iso}T00:00:00`));
               if (selectedId) {
                 const focusable = system.focusables.find((f) => f.id === selectedId);
                 if (focusable) ui.showInfo(buildInfo(focusable));

@@ -7,6 +7,20 @@
 
 const MS_PER_DAY = 86400000;
 
+const pad = (n) => String(n).padStart(2, '0');
+
+/**
+ * Calendar date in the viewer's own timezone, as YYYY-MM-DD.
+ *
+ * `toISOString()` would give the UTC date instead: at 00:30 in UTC+8 that is
+ * still "yesterday", so the HUD and the date picker disagreed with the user's
+ * calendar. The orbit maths stays on absolute instants; only the label and the
+ * picker round-trip through a calendar date.
+ */
+export function localISODate(date = new Date()) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
 export class SimClock {
   /**
    * @param {Date} [date] initial instant
@@ -34,7 +48,7 @@ export class SimClock {
   }
 
   get isoDate() {
-    return this.time.toISOString().slice(0, 10);
+    return localISODate(this.time);
   }
 }
 
