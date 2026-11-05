@@ -6,6 +6,9 @@
 
 `src/`、`tools/` 下的源代码、`index.html`、`vite.config.js` 等 —— **MIT**，见 `LICENSE`。
 
+> `LICENSE` 只写 MIT 正文，不再追加其它条款。GitHub 的 license 识别器要求文本
+> 干净匹配，混入任何附加段落都会把它判成 `NOASSERTION`，仓库页面上就显示不出 MIT 徽章。
+
 ## 贴图
 
 `public/textures/` 下的全部行星、卫星、环、星空贴图来自
