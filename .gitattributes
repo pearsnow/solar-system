@@ -1,0 +1,12 @@
+# Normalise text to LF in the repository and in the working tree. The global
+# core.autocrlf=true on Windows would otherwise store LF but check out CRLF, which
+# makes every file look modified after a clone on a different machine.
+* text=auto eol=lf
+
+# Binary assets: never let git touch line endings or try to diff them.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.tif binary
+*.ico binary
+*.svg text

@@ -1,0 +1,32 @@
+{
+  "name": "solar-system",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "太阳系 · three.js r187 WebGPU + TSL 节点管线，J2000 开普勒轨道，8K 贴图按需换档",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pearsnow/solar-system.git"
+  },
+  "homepage": "https://pearsnow.github.io/solar-system/",
+  "keywords": [
+    "three.js",
+    "webgpu",
+    "tsl",
+    "solar-system",
+    "astronomy"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "verify:orbits": "node tools/verify-orbits.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  }
+}

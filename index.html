@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Earth · three.js WebGPU + TSL</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <div id="loader">
+      <div class="loader-ring"></div>
+      <p class="loader-text">正在加载 8K 地表贴图…</p>
+      <p class="loader-sub" id="loader-sub"></p>
+    </div>
+
+    <header id="hud">
+      <h1 id="title">Earth</h1>
+      <p>three.js · WebGPU · TSL</p>
+      <ul class="hints">
+        <li><kbd>拖拽</kbd> 旋转</li>
+        <li><kbd>滚轮</kbd> 缩放</li>
+        <li><kbd>空格</kbd> 暂停 / 继续</li>
+      </ul>
+      <p class="clock" id="clock"></p>
+      <p class="quality" id="quality"></p>
+    </header>
+
+    <footer id="credit">
+      Earth textures by
+      <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a>
+      · CC BY 4.0
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
