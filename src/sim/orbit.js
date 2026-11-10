@@ -11,6 +11,45 @@
 import { J2000_JD } from '../data/elements.js';
 
 const DEG = Math.PI / 180;
+const GAUSSIAN_K = 0.01720209895;
+
+/** Universal-variable propagation from perihelion; q in AU, angles in degrees, JD in days. */
+export function cometPosition(el, jd) {
+  const { q, e } = el;
+  if (!(q > 0) || !(e >= 0)) throw new RangeError('Invalid comet elements');
+  const alpha = (1 - e) / q;
+  let dt = jd - el.tp;
+  if (alpha > 0) {
+    const period = 2 * Math.PI / (GAUSSIAN_K * Math.pow(alpha, 1.5));
+    dt = ((dt + period / 2) % period + period) % period - period / 2;
+  }
+  const stumpff = (z) => {
+    if (Math.abs(z) < 1e-5) return { C: 0.5 - z / 24 + z * z / 720, S: 1 / 6 - z / 120 + z * z / 5040 };
+    if (z > 0) { const t = Math.sqrt(z); return { C: (1 - Math.cos(t)) / z, S: (t - Math.sin(t)) / (t * t * t) }; }
+    const t = Math.sqrt(-z);
+    if (t > 700) return { C: Infinity, S: Infinity };
+    return { C: (Math.cosh(t) - 1) / (-z), S: (Math.sinh(t) - t) / (t * t * t) };
+  };
+  const target = Math.abs(GAUSSIAN_K * dt);
+  let lo = 0, hi = 1;
+  const equation = (x) => q * x + e * x * x * x * stumpff(alpha * x * x).S;
+  while (equation(hi) < target) hi *= 2;
+  for (let k = 0; k < 64; k++) {
+    const mid = (lo + hi) / 2;
+    if (equation(mid) < target) lo = mid; else hi = mid;
+  }
+  const chi = (lo + hi) / 2 * Math.sign(dt);
+  const z = alpha * chi * chi;
+  const { C, S } = stumpff(z);
+  const xp = q - chi * chi * C;
+  const yp = Math.sqrt(q * (1 + e)) * chi * (1 - z * S);
+  const w = el.w * DEG, n = el.om * DEG, i = el.i * DEG;
+  const cw = Math.cos(w), sw = Math.sin(w), cn = Math.cos(n), sn = Math.sin(n), ci = Math.cos(i), si = Math.sin(i);
+  const x = (cw * cn - sw * sn * ci) * xp + (-sw * cn - cw * sn * ci) * yp;
+  const y = (cw * sn + sw * cn * ci) * xp + (-sw * sn + cw * cn * ci) * yp;
+  const zpos = sw * si * xp + cw * si * yp;
+  return { x, y, z: zpos, r: Math.hypot(x, y, zpos) };
+}
 
 /** Julian Date from a JS Date (UTC). */
 export function julianDate(date) {
@@ -55,6 +94,7 @@ export function solveKepler(M, e) {
  * @returns {{x:number, y:number, z:number, r:number}}
  */
 export function heliocentricPosition(el, T) {
+  if (el.type === 'osculating') return positionFromOsculating(el, 2451545 + T * 36525);
   const a = el.a[0] + el.a[1] * T;
   const e = el.e[0] + el.e[1] * T;
   const inc = (el.i[0] + el.i[1] * T) * DEG;
@@ -84,6 +124,20 @@ export function heliocentricPosition(el, T) {
   return { x, y, z, r: Math.hypot(x, y, z) };
 }
 
+/** Elliptical osculating elements: angles in degrees, epoch JD, n degrees/day. */
+export function positionFromOsculating(el, jd) {
+  if (el.e < 0 || el.e >= 1 || el.a <= 0) throw new RangeError('Only elliptical orbits are supported');
+  const E = solveKepler(wrapDeg(el.ma + el.n * (jd - el.epoch)) * DEG, el.e);
+  const xp = el.a * (Math.cos(E) - el.e);
+  const yp = el.a * Math.sqrt(1 - el.e * el.e) * Math.sin(E);
+  const w = el.w * DEG, n = el.om * DEG, i = el.i * DEG;
+  const cw = Math.cos(w), sw = Math.sin(w), cn = Math.cos(n), sn = Math.sin(n), ci = Math.cos(i), si = Math.sin(i);
+  const x = (cw * cn - sw * sn * ci) * xp + (-sw * cn - cw * sn * ci) * yp;
+  const y = (cw * sn + sw * cn * ci) * xp + (-sw * sn + cw * cn * ci) * yp;
+  const z = sw * si * xp + cw * si * yp;
+  return { x, y, z, r: Math.hypot(x, y, z) };
+}
+
 /**
  * Convert ecliptic J2000 (Z-up) to the renderer's Y-up frame.
  * Ecliptic X → scene X, ecliptic Y → scene −Z, ecliptic Z → scene Y.
@@ -109,6 +163,10 @@ export function positionAt(el, date) {
  * @returns {Array<{x:number,y:number,z:number}>}
  */
 export function orbitPath(el, T, segments = 512) {
+  if (el.type === 'osculating') {
+    return Array.from({ length: segments + 1 }, (_, k) =>
+      positionFromOsculating({ ...el, ma: k * 360 / segments, n: 0 }, el.epoch));
+  }
   const a = el.a[0] + el.a[1] * T;
   const e = el.e[0] + el.e[1] * T;
   const inc = (el.i[0] + el.i[1] * T) * DEG;

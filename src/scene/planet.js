@@ -1,15 +1,19 @@
 import * as THREE from 'three/webgpu';
 import {
   abs,
+  asin,
+  atan,
   cameraPosition,
   color,
   dot,
   mix,
   normalMap,
+  mx_fractal_noise_float,
   normalWorldGeometry,
   normalize,
   output,
   positionWorld,
+  positionLocal,
   sin,
   texture,
   time,
@@ -23,6 +27,28 @@ import { createAtmosphere } from './atmosphere.js';
 import { createRings } from './rings.js';
 import { resolveTextureLevel } from '../quality.js';
 
+const OBLIQUITY = THREE.MathUtils.degToRad(23.4392911);
+export function poleToScene([raDeg, decDeg]) {
+  const ra = THREE.MathUtils.degToRad(raDeg);
+  const dec = THREE.MathUtils.degToRad(decDeg);
+  const x = Math.cos(dec) * Math.cos(ra);
+  const y = Math.cos(dec) * Math.sin(ra);
+  const z = Math.sin(dec);
+  return new THREE.Vector3(x, -y * Math.sin(OBLIQUITY) + z * Math.cos(OBLIQUITY),
+    -(y * Math.cos(OBLIQUITY) + z * Math.sin(OBLIQUITY)));
+}
+
+// IAU prime meridian, measured from the equator's ascending node in ICRF.
+export function meridianToScene([raDeg, decDeg], wDeg) {
+  const ra = THREE.MathUtils.degToRad(raDeg), dec = THREE.MathUtils.degToRad(decDeg);
+  const w = THREE.MathUtils.degToRad(wDeg);
+  const x = -Math.sin(ra) * Math.cos(w) - Math.cos(ra) * Math.sin(dec) * Math.sin(w);
+  const y = Math.cos(ra) * Math.cos(w) - Math.sin(ra) * Math.sin(dec) * Math.sin(w);
+  const z = Math.cos(dec) * Math.sin(w);
+  return new THREE.Vector3(x, -y * Math.sin(OBLIQUITY) + z * Math.cos(OBLIQUITY),
+    -(y * Math.cos(OBLIQUITY) + z * Math.sin(OBLIQUITY)));
+}
+
 /**
  * Generic planet factory.
  *
@@ -35,6 +61,7 @@ import { resolveTextureLevel } from '../quality.js';
  * the day/night line, or coastlines get a glowing halo at sunset.
  */
 export async function createPlanet(spec, { tier, anisotropy, sunDirection, level: levelOverride }) {
+  const spinPeriodDays = spec.rotationHours ? spec.rotationHours / 24 : 0;
   const loader = new THREE.TextureLoader();
   const level = resolveTextureLevel(levelOverride ?? tier.key, spec.textureLevel ?? '8k');
   const base = `${import.meta.env.BASE_URL}textures/${level}/${spec.id}/`;
@@ -57,7 +84,7 @@ export async function createPlanet(spec, { tier, anisotropy, sunDirection, level
   const f = spec.features ?? {};
 
   const [dayMap, nightMap, normalTex, cloudsMap, roughMap, ringMap] = await Promise.all([
-    load(paths.day, THREE.SRGBColorSpace),
+    paths.day ? load(paths.day, THREE.SRGBColorSpace) : null,
     paths.night ? load(paths.night, THREE.SRGBColorSpace) : null,
     paths.normal ? load(paths.normal) : null,
     paths.clouds ? load(paths.clouds) : null,
@@ -99,7 +126,45 @@ export async function createPlanet(spec, { tier, anisotropy, sunDirection, level
     roughness: 0.8,
   });
 
-  let baseColor = texture(dayMap);
+  let baseColor = dayMap ? texture(dayMap) : color(spec.color ?? '#aaaaaa');
+  if (!dayMap && f.procedural === 'pluto') {
+    const p = normalize(positionLocal);
+    const lat = asin(p.y.clamp(-1, 1)).mul(57.2957795);
+
+    // Longitude measured from +X so the two named albedo features can sit at
+    // their published coordinates: Sputnik Planitia near 200°E, and the dark
+    // Cthulhu Macula straddling the equator around 60°E. Both are implicit curves
+    // rather than a texture, which keeps them seam-free.
+    const lon = atan(p.z, p.x).mul(57.2957795);
+
+    const hx = lon.sub(200).div(32);
+    const hy = lat.sub(12).div(23);
+    const h = hx.mul(hx).add(hy.mul(hy)).sub(1);
+    const heartShape = h.mul(h).mul(h).sub(hx.mul(hx).mul(hy).mul(hy).mul(hy));
+    const heart = heartShape.smoothstep(-0.45, 0.1).oneMinus();
+
+    const cx = lon.sub(60).div(58);
+    const cy = lat.sub(2).div(17);
+    const cthulhu = cx.mul(cx).add(cy.mul(cy)).sqrt().smoothstep(0.5, 1.1).oneMinus();
+
+    // Two scales: a broad albedo field to break up the disc, and a finer one for
+    // crater-scale speckle. A single high-frequency field reads as television
+    // static; a single low-frequency one reads as a flat ball.
+    const broad = mx_fractal_noise_float(p.mul(3.0), 3, 2, 0.5).mul(0.5).add(0.5);
+    const fine = mx_fractal_noise_float(p.mul(11.0), 2, 2, 0.5).mul(0.5).add(0.5);
+    const shade = broad.mul(0.78).add(fine.mul(0.22));
+
+    // Pluto is a high-albedo body; the old palette was two near-identical browns,
+    // which the exposure crushed into one flat tone.
+    const ground = mix(color('#8d7b67'), color('#d9c7ab'), shade);
+    let base = mix(ground, color('#4b3f36'), cthulhu.mul(0.8));
+    base = mix(
+      base,
+      mix(color('#d8c8ae'), color('#f7f0e0'), shade),
+      heart.mul(0.9),
+    );
+    baseColor = base;
+  }
 
   if (f.bands) {
     // Ice giants have almost no visible structure from Voyager's single flyby.
@@ -172,7 +237,9 @@ export async function createPlanet(spec, { tier, anisotropy, sunDirection, level
   // while the equator stays tilted relative to the orbital plane.
   const tilt = new THREE.Group();
   tilt.name = `${spec.id}-tilt`;
-  tilt.rotation.z = THREE.MathUtils.degToRad(spec.axialTilt ?? 0);
+  if (spec.pole) tilt.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), poleToScene(spec.pole).normalize());
+  else tilt.rotation.z = THREE.MathUtils.degToRad(spec.axialTilt ?? 0);
+  const tiltInverse = tilt.quaternion.clone().invert();
   group.add(tilt);
   tilt.add(globe);
 
@@ -206,16 +273,38 @@ export async function createPlanet(spec, { tier, anisotropy, sunDirection, level
     atmosphere,
     uniforms,
     geometry,
-    maps: { dayMap, nightMap, normalTex, cloudsMap, roughMap },
+    maps: { dayMap, nightMap, normalTex, cloudsMap, roughMap, proceduralMap: material.userData.proceduralMap },
 
     /**
      * @param {number} dt seconds
      * @param {THREE.Camera} camera
      * @param {THREE.Vector3} sunWorld normalized sun direction in world space
      */
-    update(dt, camera, sunWorld) {
-      if (spec.spinSpeed) globe.rotation.y += dt * spec.spinSpeed;
-      if (clouds && spec.cloudDrift) clouds.rotation.y += dt * spec.cloudDrift;
+    update(dt, camera, sunWorld, jd) {
+      if (spec.w0 && spec.pole && jd !== undefined) {
+        const tau = Math.PI * 2;
+        const days = jd - 2451545.0;
+        const w = spec.w0[0] + spec.w0[1] * days;
+        const direction = meridianToScene(spec.pole, w).applyQuaternion(tiltInverse).normalize();
+        const target = Math.atan2(-direction.z, direction.x);
+        let delta = target - globe.rotation.y;
+        delta = ((delta % tau) + tau * 1.5) % tau - Math.PI;
+        const step = THREE.MathUtils.clamp(delta, -0.5, 0.5);
+        globe.rotation.y = ((globe.rotation.y + step + Math.PI) % tau + tau) % tau - Math.PI;
+        if (clouds) {
+          const cloudDirection = meridianToScene(spec.pole, spec.w0[0] + spec.w0[1] * days * 1.07)
+            .applyQuaternion(tiltInverse).normalize();
+          clouds.rotation.y = Math.atan2(-cloudDirection.z, cloudDirection.x);
+        }
+      } else if (spinPeriodDays !== 0 && jd !== undefined) {
+        const tau = Math.PI * 2;
+        const target = tau * ((jd / spinPeriodDays) % 1);
+        let delta = target - globe.rotation.y;
+        delta = ((delta % tau) + tau * 1.5) % tau - Math.PI;
+        const step = THREE.MathUtils.clamp(delta, -0.5, 0.5);
+        globe.rotation.y = ((globe.rotation.y + step + Math.PI) % tau + tau) % tau - Math.PI;
+        if (clouds) clouds.rotation.y = tau * ((jd / (spinPeriodDays / 1.07)) % 1);
+      }
 
       if (sunWorld) uniforms.sunDirection.value.copy(sunWorld);
 

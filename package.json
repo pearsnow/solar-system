@@ -1,9 +1,9 @@
 {
   "name": "solar-system",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "太阳系 · three.js r187 WebGPU + TSL 节点管线，J2000 开普勒轨道，8K 贴图按需换档",
+  "description": "太阳系 v2 · three.js r187 WebGPU + TSL，线性真实距离、210 颗卫星、2866 颗实测小行星、41 颗彗星",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -15,7 +15,9 @@
     "webgpu",
     "tsl",
     "solar-system",
-    "astronomy"
+    "astronomy",
+    "kepler",
+    "vite"
   ],
   "scripts": {
     "dev": "vite",

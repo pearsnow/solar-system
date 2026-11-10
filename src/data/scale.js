@@ -12,8 +12,15 @@
  */
 
 const EARTH_RADIUS_KM = 6371;
+export const satelliteOrbit = (ratio) => ratio <= 2.4 ? ratio : 2.4 * Math.pow(ratio / 2.4, 0.42);
 
 export const SCALE_MODES = {
+  true: {
+    id: 'true', label: '线性距离', note: '距离线性，天体半径与卫星轨道经过压缩',
+    orbit: (au) => 60 * au,
+    radius: (km) => 1.3 * Math.pow(km / EARTH_RADIUS_KM, 0.35),
+    satellite: satelliteOrbit,
+  },
   visual: {
     id: 'visual',
     label: '压缩比例',
@@ -42,5 +49,5 @@ export const SCALE_MODES = {
 };
 
 export function resolveScale(name) {
-  return SCALE_MODES[name] ?? SCALE_MODES.visual;
+  return SCALE_MODES[name] ?? SCALE_MODES.true;
 }

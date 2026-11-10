@@ -1,0 +1,1072 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<base href="/iau/">
+
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/mpc.css">
+
+  <!-- This stylesheet is used only to provide the color directive for the "STATUS" navbar item. -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/mpc-status-menu.css">
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/table-sorter.css">
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+  <link media="all" rel="stylesheet" href="/css/all.css">
+
+  <link rel="icon" type="image/png" href="/iau/figs/MPClogo16.png">
+  <meta name="description" content="We are the official body that deals with
+      astrometric observations and orbits of minor planets (asteroids) and comets.">
+
+  <meta name="keywords" content="astrometry, observations, orbits,
+      minor planets, asteroids, comets, near earth objects, 
+      potentially hazardous asteroids">
+
+  <script type="text/javascript" src="/js/jquery-latest.js"></script>
+<!--  <script type="text/javascript" src="/js/jquery.main.js"></script> -->
+<!--  <script type="text/javascript" src="/js/jquery.metadata.js"></script> -->
+  <script type="text/javascript" src="/js/jquery.tablesorter.js"></script>
+  <script type="text/javascript" src="/js/webtrends.js"></script>
+  <script type="text/javascript" src="/js/track_pdfs.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic|PT+Sans:400,700,400italic,700italic|PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
+
+
+<title>Natural Satellites Ephemeris Service</title>
+<META name="description" content="We are the official body that deals
+with astrometric observations and orbits of minor planets (asteroids) and
+comets.">
+<META name="keywords" content="astrometry, observations, observation, orbits,
+orbit, minor planets, minor planet, asteroids, asteroid, comets, comet">
+</head>
+
+<!-- Body preamble -->
+<body>
+  <!-- wrapper -->
+  <div id="wrapper">
+    <div class="w1">
+      <!-- header -->
+      <header id="header">
+        <div class="holder">
+          <!-- logo -->
+          <h1 class="logo"><a href="/">The International Astronomical Union Minor Planet Center</a></h1>
+          <div class="area">
+            <!-- Top-right navbar -->
+            <nav class="top-nav">
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+		            <li><a href="/mpcops/contact/">Contact</a></li>
+                <li><a href="https://mpc-service.atlassian.net/servicedesk/customer/portals">Helpdesk</a></li>
+              </ul>
+            </nav>
+            <!-- website search form -->
+            <div class="form-holder">
+              <form class="search-form" method="get" action="https://www.google.com/search">
+                <fieldset>
+                  <input type="hidden" name="sitesearch" value="minorplanetcenter.net">
+                  <input type="text" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" id="search" name="q" value="Search MPC">
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+        <nav class="nav-holder">
+          <!-- main navigation -->
+          <ul id="nav">
+            <li>
+              <a href="/iau/mpc.html"><span>OBSERVERS</span></a>
+              <ul>
+                <li><a href="/iau/MPEph/MPEph.html">Ephemeris Service</a></li>
+                <li><a href="/cgi-bin/checkmp.cgi">MPChecker</a></li>
+
+                <li><a href="javascript:void(0)" class="nested">MPECs</a>
+                  <ul>
+                    <li><a href="/mpec/RecentMPECs.html">Recent</a></li>
+                    <li><a href="/mpcops/mpecs/">Search</a></li>
+                    <li><a href="/mpcops/signup/mpecs/">Subscription Service</a></li>
+                  </ul>
+                </li>
+
+                <li><a href="/iau/NEO/toconfirm_tabular.html">NEO Confirmation</a></li>
+                <li><a href="/iau/NEO/pccp_tabular.html">Possible Comet Confirmation</a></li>
+                <li><a href="/mpcops/submissions/cometary/">Report Cometary Activity</a></li>
+                <li><a href="/db_search">Orbits/Observations Database</a></li>				
+                <li><a href="https://data.minorplanetcenter.net/explorer">MPC Explorer</a></li>
+
+                <li><a href="/iau/Ephemerides/EphemOrbEls.html" class="nested">Orbital Elements</a>
+                  <ul>
+                    <li><a href="/iau/MPCORB.html">MPCORB</a></li>
+                    <li><a href="/iau/ECS/MPCAT/MPCAT.html">MPCAT</a></li>
+                    <li><a href="/iau/ECS/MPCUPDATE/MPCUPDATE.html">MPCUPDATE</a></li>
+                    <li><a href="/iau/Ephemerides/SoftwareEls.html">Orbital Elements for Software</a></li>
+                  </ul>                
+                </li>
+
+                <li><a href="javascript:void(0)" class="nested">Publications</a>
+                  <ul>
+                    <li><a href="/iau/services/MPCServices.html">Publications Overview</a></li>
+                    <li><a href="/iau/ECS/MPCArchive/MPCArchive_TBL.html">Publications Archive</a></li>
+                  </ul>
+                </li>
+
+                <li><a href="/iau/NEO/TheNEOPage.html" class="nested">NEO Services</a>
+                  <ul>
+                    <li><a href="/iau/NEO/toconfirm_tabular.html">Confirmation</a></li>
+                    <li><a href="/iau/NEO/PossNEO.html">Ratings</a></li>
+                    <li><a href="/cgi-bin/neaobs.cgi">Observation Planning Aid</a></li>
+                    <li><a href="/neocp_followup_report/">NEOCP Followup Report Form</a></li>
+                    <li><a href="/neocp_followup_reports/">NEOCP Followup Reports</a></li>
+                    <li><a href="/neocp_obs">NEOCP Recent Observations</a></li>
+                    <li><a href="/mpcops/neocp/neocp_plots/">NEOCP Plots</a></li>
+                    <li><a href="/cgi-bin/cgipy/neocp_info/">Current NEOCP Objects</a></li>
+                    <li><a href="/mpcops/neocp/neocp_prev_des/">Previous NEOCP Objects</a></li>
+                    <li><a href="/iau/recovery/recovery.html">NEO Recovery</a></li>
+                  </ul>
+                </li>
+
+                <li><a href="javascript:void(0)" class="nested">Observations</a>
+                  <ul>
+                    <li><a href="/wamo/wamo.html">WAMO</a></li>
+                  </ul>
+                </li>
+
+                <li><a href="/mpcops/orbits/" class="nested">Orbits</a>
+                  <ul>
+                    <li><a href="https://data.minorplanetcenter.net/comparison/index.html">Orbit Comparison Tool</a></li>
+                    <li><a href="/mpcops/orbits/no-orbits-astrometry/">Request for archival astrometry</a></li>
+                  </ul>
+                </li>
+
+                <li><a href="/iau/services/WebCSAccess.html" class="nested">Other Observer Services</a>
+                  <ul>
+                    <li><a href="/whatsup">Observing Target List</a></li>
+                    <li><a href="/iau/lists/Customize.html">Observing List Customizer</a></li>
+                    <li><a href="/iau/NatSats/NaturalSatellites.html">Natural Satellite Ephemerides</a></li>
+                    <li><a href="/iau/MPEph/NewObjEphems.html">New Object Ephemerides</a></li>
+                    <li><a href="/iau/delays/neocp_delay.html">Processing Times</a></li>
+                    <li><a href="/pointings">Submitting Pointing Information</a></li>
+                    <li><a href="/mpcops/pointings/sky_coverage/">Search the Pointing Database</a></li>
+                  </ul>
+                </li>
+		
+                <li><a href="javascript:void(0)" class="nested">Identifications</a>
+                  <ul>
+                    <li><a href="/mpcops/documentation/identifications/">Documentation</a></li>
+                    <li><a href="/mpcops/documentation/identifications/submission-format/">Submission Format</a></li>
+                    <li><a href="/mpcops/submissions/identifications/">Submit</a></li>
+                  </ul>
+                </li>
+
+                <li><a href="/iau/ECS/MPCAT-OBS/MPCAT-OBS.html">Observation Archive</a></li>
+                <li><a href="/iau/SkyCoverage.html">Sky Coverage</a></li>
+                <li><a href="/iau/MPC_Documentation.html" class="nested">Documentation</a>
+                  <ul>
+                    <li><a href="/iau/info/TechInfo.html">MPC Submission Info</a></li>
+                    <li><a href="https://docs.minorplanetcenter.net/mpc-ops-docs/astrometry/getting-started/">Astrometry Guide</a></li>
+                    <li><a href="/mpcops/documentation/artificial-satellites/">Artificial Satellites</a></li>
+                    <li><a href="/submit_action_code">Submit Action Code</a></li>		    
+                    <li><a href="/mpcops/documentation/">Other</a></li>		    
+                    <!-- <li><a href="/iau/WhatsNew.html">What's New</a></li> -->
+                  </ul>                
+                </li>
+                <li><a href="/iau/lists/Lists.html" class="nested">Lists and Plots</a>
+                  <ul>
+                    <li><a href="/iau/lists/MPLists.html">Minor Planets</a></li>
+                      <!--<ul>
+                        <li><a href="/iau/lists/t_atens.html">Atens</a></li>
+                        <li><a href="/iau/lists/t_apollos.html">Apollos</a></li>
+                        <li><a href="/iau/lists/t_amors.html">Amors</a></li>
+                        <li><a href="/iau/lists/t_centaurs.html">Centaurs and Scattered Disk Objects</a></li>
+                        <li><a href="/iau/lists/t_tnos.html">Transneptunian Objects</a></li>
+                        <li><a href="/iau/lists/t_others.html">Other Unusual Objects</a></li>
+                        <li><a href="/iau/lists/t_dangerous.html">Potentially Hazardous Asteroids</a></li>
+                      </ul>-->
+                    <li><a href="/iau/lists/CometLists.html">Comets</a></li>
+                      <!--<ul>
+                        <li><a href="/iau/lists/LastCometObs.html">Date of Last Observation</a></li>
+                        <li><a href="/iau/lists/LastYear.html">Designations from the Past Year</a></li>
+                        <li><a href="http://www.icq.eps.harvard.edu/CometMags.html">Comet Magnitude Estimates</a></li>
+                        <li><a href="/iau/lists/ClosestComets.html">Closest Approaches</a></li>
+                        <li><a href="/iau/lists/PeriodicCodes.html">Periodic Comets</a></li>
+                      </ul>-->
+                    <li><a href="/iau/lists/ObsCodesF.html">Observatory Codes</a></li>		    
+                    <li><a href="/iau/Animations/Animations.html">Animations</a></li>
+                  </ul>                
+                </li>
+                <li><a href="javascript:void(0)" class="nested">Summaries</a>
+                  <ul>
+                    <li><a href="https://data.minorplanetcenter.net/summary">(Alpha) MPC Summary</a></li>
+                    <li><a href='/mpc/summary'>Latest Published Data</a></li>
+                    <li><a href='/iau/lists/YearlyBreakdown.html'>Summary of PHA and NEA Discoveries</a></li>
+                  </ul>
+                <li><a href='/deprecated-pages.html'>Deprecated Webpages</a></li>
+              </ul>
+            </li>
+            <li><a href="/data"><span>DATA</span></a></li>
+	    
+            <li><a href="https://buttondown.com/MPC_newsletter"><span>NEWSLETTER</span></a></li>
+
+	        <!-- /var/www/html/mpc/public/stylesheets/mpc-status-menu.css has a color directive. -->
+	        <!-- It's meant to provide real-time, operational styling for this item. -->
+            <li><a href="/mpcops/mpcstatus/"><span class="mpc-status-menu">STATUS</span></a></li>
+
+            <li><a href="/mpcops/documentation/"><span>DOCUMENTATION</span></a>
+
+            <li><a href="/"><span>EXTERNAL</span></a>
+              <ul id="external">
+                <li><a href="https://mpcmug.astro.umd.edu/" target="_blank">MPC User Group (MUG)</a></li>
+                <li><a href="http://iawn.net/" target="_blank">IAWN</a></li>
+                <li><a href="https://sbnmpc.astro.umd.edu/" target="_blank">SBN Annex</a></li>
+                <li><a href="https://www.wgsbn-iau.org/" target="_blank">WGSBN</a></li>
+                <li><a href='http://alcdef.org'>Light Curve Database</a></li>
+              </ul>
+	          </li>
+          </ul>
+        </nav>
+      </header>
+
+      <script type="text/javascript">
+        // After the page loads, we style each top-level menu bar item based on the word length.
+        document.addEventListener('DOMContentLoaded', function () {
+        const listItems = document.querySelectorAll('#nav li ');
+        function getDirectTextContent(element) {
+          /*
+          Get the menu bar item's text with leading- and trailing-whitespace removed.
+
+          The forEach accounts for multiple child nodes of the li (list item).
+          */
+          let directTextContent = '';
+          element.childNodes.forEach(node => {
+            if (node.textContent.trim().includes('OBSERVERS') || node.textContent.trim().includes('DATA') || node.textContent.trim().includes('NEWSLETTER') || node.textContent.trim().includes('STATUS') || node.textContent.trim().includes('DOCUMENTATION') || node.textContent.trim().includes('EXTERNAL')){
+                directTextContent += node.textContent.trim();
+            }
+          });
+          return directTextContent;
+        }
+
+        listItems.forEach(function (li) {
+          const directText = getDirectTextContent(li);
+          const textLength = directText.length;
+
+          // Apply class based on length
+          // This is used to style each menu item based on the word length.
+          if (textLength <= 5) {
+            li.classList.add('short-word');
+          } else if (textLength <= 10) {
+            li.classList.add('medium-word');
+          } else {
+            li.classList.add('long-word');
+          }
+        });
+        });
+      </script>
+
+      <!-- main -->
+      <div id="main">
+
+
+<!-- Navigation Menu block -->
+
+<li class="yuimenuitemlabel alert"> Preparation <a href="/iau/info/MPCOpStatus.html">(Info)</a></li>
+
+
+
+
+<!-- Main content block -->
+
+<br>
+<p>
+<h2>Natural Satellites Ephemeris Service</h2>
+Ephemerides, orbital elements and residual blocks for the outer irregular
+satellites of the giant planets are available here.
+<p>
+Choose which objects you wish to observe, select what information you want
+returned, indicate your ephemeris options (if necessary) and then select
+the "Get Information" button.
+<p><hr><p>
+<form method=POST action="https://www.minorplanetcenter.net/cgi-bin/natsats.cgi">
+<center><input type=submit value=" Get Information "> <input type=reset value=" Reset form "><p></center>
+<hr>
+<h2>Selection of Objects</h2>
+<p><input type="radio" name="sel1" VALUE="1A"> <b>All Jovian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="1U"> <b>All unnumbered Jovian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="1N"> <b>All numbered Jovian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="1" CHECKED> <b>Just the following Jovian outer irregular satellites</b>
+<p>
+<table style="width:100%">
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J006S"> Jupiter 6 (Himalia)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J007S"> Jupiter 7 (Elara)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J008S"> Jupiter 8 (Pasiphae)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J009S"> Jupiter 9 (Sinope)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J010S"> Jupiter 10 (Lysithea)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J011S"> Jupiter 11 (Carme)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J012S"> Jupiter 12 (Ananke)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J013S"> Jupiter 13 (Leda)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J017S"> Jupiter 17 (Callirrhoe)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J018S"> Jupiter 18 (Themisto)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J019S"> Jupiter 19 (Megaclite)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J020S"> Jupiter 20 (Taygete)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J021S"> Jupiter 21 (Chaldene)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J022S"> Jupiter 22 (Harpalyke)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J023S"> Jupiter 23 (Kalyke)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J024S"> Jupiter 24 (Iocaste)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J025S"> Jupiter 25 (Erinome)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J026S"> Jupiter 26 (Isonoe)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J027S"> Jupiter 27 (Praxidike)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J028S"> Jupiter 28 (Autonoe)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J029S"> Jupiter 29 (Thyone)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J030S"> Jupiter 30 (Hermippe)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J031S"> Jupiter 31 (Aitne)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J032S"> Jupiter 32 (Eurydome)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J033S"> Jupiter 33 (Euanthe)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J034S"> Jupiter 34 (Euporie)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J035S"> Jupiter 35 (Orthosie)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J036S"> Jupiter 36 (Sponde)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J037S"> Jupiter 37 (Kale)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J038S"> Jupiter 38 (Pasithee)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J039S"> Jupiter 39 (Hegemone)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J040S"> Jupiter 40 (Mneme)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J041S"> Jupiter 41 (Aoede)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J042S"> Jupiter 42 (Thelxinoe)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J043S"> Jupiter 43 (Arche)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J044S"> Jupiter 44 (Kallichore)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J045S"> Jupiter 45 (Helike)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J046S"> Jupiter 46 (Carpo)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J047S"> Jupiter 47 (Eukelade)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J048S"> Jupiter 48 (Cyllene)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J049S"> Jupiter 49 (Kore)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J050S"> Jupiter 50 (Herse)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J051S"> Jupiter 51 (unnamed)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J052S"> Jupiter 52 (unnamed)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J053S"> Jupiter 53 (Dia)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J054S"> Jupiter 54 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J055S"> Jupiter 55 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J056S"> Jupiter 56 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J057S"> Jupiter 57 (Eirene)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J058S"> Jupiter 58 (Philophrosyne)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J059S"> Jupiter 59 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J060S"> Jupiter 60 (Eupheme)</td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J061S"> Jupiter 61 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J062S"> Jupiter 62 (Valetudo)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J063S"> Jupiter 63 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J064S"> Jupiter 64 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J065S"> Jupiter 65 (Pandia)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J066S"> Jupiter 66 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J067S"> Jupiter 67 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J068S"> Jupiter 68 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J069S"> Jupiter 69 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J070S"> Jupiter 70 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J071S"> Jupiter 71 (Ersa)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="J072S"> Jupiter 72 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="J073S"> Jupiter 73 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J040"> S/2003 J 4 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J090"> S/2003 J 9 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J100"> S/2003 J 10 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J120"> S/2003 J 12 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J160"> S/2003 J 16 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J230"> S/2003 J 23 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK03J240"> S/2003 J 24 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK10J030"> S/2010 J 3 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK10J040"> S/2010 J 4 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK10J050"> S/2010 J 5 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK10J060"> S/2010 J 6 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK11J030"> S/2011 J 3 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK11J040"> S/2011 J 4 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK11J050"> S/2011 J 5 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK11J060"> S/2011 J 6 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK16J030"> S/2016 J 3 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK16J040"> S/2016 J 4 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J100"> S/2017 J 10 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J110"> S/2017 J 11 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J120"> S/2017 J 12 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J130"> S/2017 J 13 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J140"> S/2017 J 14 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J150"> S/2017 J 15 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J160"> S/2017 J 16 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J170"> S/2017 J 17 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK17J180"> S/2017 J 18 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK18J020"> S/2018 J 2 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK18J030"> S/2018 J 3 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK18J040"> S/2018 J 4 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK18J050"> S/2018 J 5 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J010"> S/2021 J 1 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J020"> S/2021 J 2 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J030"> S/2021 J 3 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J040"> S/2021 J 4 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J050"> S/2021 J 5 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J060"> S/2021 J 6 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J070"> S/2021 J 7 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK21J080"> S/2021 J 8 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK22J010"> S/2022 J 1 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK22J020"> S/2022 J 2 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK22J030"> S/2022 J 3 </td>
+<td width="33%"> <input type="checkbox" name="sel71" value="SK24J010"> S/2024 J 1 </td>
+<td width="33%"> </td>
+</tr>
+</table>
+<p><input type="radio" name="sel1" VALUE="2A"> <b>All Saturnian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="2U"> <b>All unnumbered Saturnian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="2N"> <b>All numbered Saturnian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="2"> <b>Just the following Saturnian outer irregular satellites</b>
+<p>
+<table style="width:100%">
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S009S"> Saturn 9 (Phoebe)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S019S"> Saturn 19 (Ymir)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S020S"> Saturn 20 (Paaliaq)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S021S"> Saturn 21 (Tarvos)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S022S"> Saturn 22 (Ijiraq)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S023S"> Saturn 23 (Suttungr)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S024S"> Saturn 24 (Kiviuq)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S025S"> Saturn 25 (Mundilfari)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S026S"> Saturn 26 (Albiorix)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S027S"> Saturn 27 (Skathi)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S028S"> Saturn 28 (Erriapus)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S029S"> Saturn 29 (Siarnaq)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S030S"> Saturn 30 (Thrymr)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S031S"> Saturn 31 (Narvi)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S036S"> Saturn 36 (Aegir)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S037S"> Saturn 37 (Bebhionn)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S038S"> Saturn 38 (Bergelmir)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S039S"> Saturn 39 (Bestla)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S040S"> Saturn 40 (Farbauti)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S041S"> Saturn 41 (Fenrir)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S042S"> Saturn 42 (Fornjot)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S043S"> Saturn 43 (Hati)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S044S"> Saturn 44 (Hyrrokkin)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S045S"> Saturn 45 (Kari)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S046S"> Saturn 46 (Loge)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S047S"> Saturn 47 (Skoll)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S048S"> Saturn 48 (Surtur)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S050S"> Saturn 50 (Jarnsaxa)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S051S"> Saturn 51 (Greip)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S052S"> Saturn 52 (Tarqeq)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S054S"> Saturn 54 (Gridr)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S055S"> Saturn 55 (Angrboda)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S056S"> Saturn 56 (Skrymir)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S057S"> Saturn 57 (Gerd)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S058S"> Saturn 58 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S059S"> Saturn 59 (Eggther)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S060S"> Saturn 60 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S061S"> Saturn 61 (Beli)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S062S"> Saturn 62 (Gunnlod)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S063S"> Saturn 63 (Thiazzi)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S064S"> Saturn 64 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S065S"> Saturn 65 (Alvaldi)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="S066S"> Saturn 66 (Geirrod)</td>
+<td width="33%"> <input type="checkbox" name="sel72" value="S067S"> Saturn 67 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S120"> S/2004 S 12 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S130"> S/2004 S 13 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S170"> S/2004 S 17 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S210"> S/2004 S 21 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S240"> S/2004 S 24 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S280"> S/2004 S 28 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S310"> S/2004 S 31 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S360"> S/2004 S 36 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S370"> S/2004 S 37 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S390"> S/2004 S 39 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S400"> S/2004 S 40 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S410"> S/2004 S 41 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S420"> S/2004 S 42 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S430"> S/2004 S 43 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S440"> S/2004 S 44 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S450"> S/2004 S 45 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S460"> S/2004 S 46 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S470"> S/2004 S 47 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S480"> S/2004 S 48 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S490"> S/2004 S 49 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S500"> S/2004 S 50 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S510"> S/2004 S 51 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S520"> S/2004 S 52 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S530"> S/2004 S 53 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S540"> S/2004 S 54 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S550"> S/2004 S 55 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S560"> S/2004 S 56 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S570"> S/2004 S 57 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S580"> S/2004 S 58 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S590"> S/2004 S 59 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S600"> S/2004 S 60 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK04S610"> S/2004 S 61 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK05S040"> S/2005 S 4 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK05S050"> S/2005 S 5 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK05S060"> S/2005 S 6 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK05S070"> S/2005 S 7 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S010"> S/2006 S 1 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S030"> S/2006 S 3 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S090"> S/2006 S 9 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S100"> S/2006 S 10 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S110"> S/2006 S 11 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S120"> S/2006 S 12 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S130"> S/2006 S 13 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S140"> S/2006 S 14 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S150"> S/2006 S 15 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S160"> S/2006 S 16 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S170"> S/2006 S 17 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S180"> S/2006 S 18 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S190"> S/2006 S 19 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S200"> S/2006 S 20 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S210"> S/2006 S 21 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S220"> S/2006 S 22 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S230"> S/2006 S 23 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S240"> S/2006 S 24 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S250"> S/2006 S 25 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S260"> S/2006 S 26 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S270"> S/2006 S 27 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S280"> S/2006 S 28 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK06S290"> S/2006 S 29 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S020"> S/2007 S 2 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S030"> S/2007 S 3 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S050"> S/2007 S 5 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S060"> S/2007 S 6 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S070"> S/2007 S 7 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S080"> S/2007 S 8 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S090"> S/2007 S 9 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S100"> S/2007 S 10 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK07S110"> S/2007 S 11 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S010"> S/2019 S 1 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S020"> S/2019 S 2 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S030"> S/2019 S 3 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S040"> S/2019 S 4 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S050"> S/2019 S 5 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S060"> S/2019 S 6 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S070"> S/2019 S 7 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S080"> S/2019 S 8 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S090"> S/2019 S 9 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S100"> S/2019 S 10 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S110"> S/2019 S 11 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S120"> S/2019 S 12 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S130"> S/2019 S 13 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S140"> S/2019 S 14 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S150"> S/2019 S 15 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S160"> S/2019 S 16 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S170"> S/2019 S 17 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S180"> S/2019 S 18 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S190"> S/2019 S 19 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S200"> S/2019 S 20 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S210"> S/2019 S 21 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S220"> S/2019 S 22 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S230"> S/2019 S 23 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S240"> S/2019 S 24 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S250"> S/2019 S 25 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S260"> S/2019 S 26 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S270"> S/2019 S 27 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S280"> S/2019 S 28 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S290"> S/2019 S 29 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S300"> S/2019 S 30 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S310"> S/2019 S 31 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S320"> S/2019 S 32 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S330"> S/2019 S 33 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S340"> S/2019 S 34 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S350"> S/2019 S 35 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S360"> S/2019 S 36 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S370"> S/2019 S 37 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S380"> S/2019 S 38 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S390"> S/2019 S 39 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S400"> S/2019 S 40 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S410"> S/2019 S 41 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S420"> S/2019 S 42 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S430"> S/2019 S 43 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK19S440"> S/2019 S 44 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S010"> S/2020 S 1 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S020"> S/2020 S 2 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S030"> S/2020 S 3 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S040"> S/2020 S 4 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S050"> S/2020 S 5 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S060"> S/2020 S 6 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S070"> S/2020 S 7 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S080"> S/2020 S 8 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S090"> S/2020 S 9 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S100"> S/2020 S 10 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S110"> S/2020 S 11 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S120"> S/2020 S 12 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S130"> S/2020 S 13 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S140"> S/2020 S 14 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S150"> S/2020 S 15 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S160"> S/2020 S 16 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S170"> S/2020 S 17 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S180"> S/2020 S 18 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S190"> S/2020 S 19 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S200"> S/2020 S 20 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S210"> S/2020 S 21 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S220"> S/2020 S 22 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S230"> S/2020 S 23 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S240"> S/2020 S 24 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S250"> S/2020 S 25 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S260"> S/2020 S 26 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S270"> S/2020 S 27 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S280"> S/2020 S 28 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S290"> S/2020 S 29 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S300"> S/2020 S 30 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S310"> S/2020 S 31 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S320"> S/2020 S 32 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S330"> S/2020 S 33 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S340"> S/2020 S 34 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S350"> S/2020 S 35 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S360"> S/2020 S 36 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S370"> S/2020 S 37 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S380"> S/2020 S 38 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S390"> S/2020 S 39 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S400"> S/2020 S 40 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S410"> S/2020 S 41 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S420"> S/2020 S 42 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S430"> S/2020 S 43 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S440"> S/2020 S 44 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S450"> S/2020 S 45 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S460"> S/2020 S 46 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S470"> S/2020 S 47 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S480"> S/2020 S 48 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK20S490"> S/2020 S 49 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S010"> S/2023 S 1 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S020"> S/2023 S 2 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S030"> S/2023 S 3 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S040"> S/2023 S 4 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S050"> S/2023 S 5 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S060"> S/2023 S 6 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S070"> S/2023 S 7 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S080"> S/2023 S 8 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S090"> S/2023 S 9 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S100"> S/2023 S 10 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S110"> S/2023 S 11 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S120"> S/2023 S 12 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S130"> S/2023 S 13 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S140"> S/2023 S 14 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S150"> S/2023 S 15 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S160"> S/2023 S 16 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S170"> S/2023 S 17 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S180"> S/2023 S 18 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S190"> S/2023 S 19 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S200"> S/2023 S 20 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S210"> S/2023 S 21 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S220"> S/2023 S 22 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S230"> S/2023 S 23 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S240"> S/2023 S 24 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S250"> S/2023 S 25 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S260"> S/2023 S 26 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S270"> S/2023 S 27 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S280"> S/2023 S 28 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S290"> S/2023 S 29 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S300"> S/2023 S 30 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S310"> S/2023 S 31 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S320"> S/2023 S 32 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S330"> S/2023 S 33 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S340"> S/2023 S 34 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S350"> S/2023 S 35 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S360"> S/2023 S 36 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S370"> S/2023 S 37 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S380"> S/2023 S 38 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S390"> S/2023 S 39 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S400"> S/2023 S 40 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S410"> S/2023 S 41 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S420"> S/2023 S 42 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S430"> S/2023 S 43 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S440"> S/2023 S 44 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S450"> S/2023 S 45 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S460"> S/2023 S 46 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S470"> S/2023 S 47 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S480"> S/2023 S 48 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S490"> S/2023 S 49 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S500"> S/2023 S 50 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S510"> S/2023 S 51 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S520"> S/2023 S 52 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S530"> S/2023 S 53 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S540"> S/2023 S 54 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S550"> S/2023 S 55 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S560"> S/2023 S 56 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S570"> S/2023 S 57 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S580"> S/2023 S 58 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S590"> S/2023 S 59 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S600"> S/2023 S 60 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S610"> S/2023 S 61 </td>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S620"> S/2023 S 62 </td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel72" value="SK23S630"> S/2023 S 63 </td>
+<td width="33%"> </td>
+<td width="33%"> </td>
+</tr>
+</table>
+<p><input type="radio" name="sel1" VALUE="3A"> <b>All Uranian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="3U"> <b>All unnumbered Uranian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="3N"> <b>All numbered Uranian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="3"> <b>Just the following Uranian outer irregular satellites</b>
+<p>
+<table style="width:100%">
+<tr>
+<td width="33%"> <input type="checkbox" name="sel73" value="U016S"> Uranus 16 (Caliban)</td>
+<td width="33%"> <input type="checkbox" name="sel73" value="U017S"> Uranus 17 (Sycorax)</td>
+<td width="33%"> <input type="checkbox" name="sel73" value="U018S"> Uranus 18 (Prospero)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel73" value="U019S"> Uranus 19 (Setebos)</td>
+<td width="33%"> <input type="checkbox" name="sel73" value="U020S"> Uranus 20 (Stephano)</td>
+<td width="33%"> <input type="checkbox" name="sel73" value="U021S"> Uranus 21 (Trinculo)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel73" value="U022S"> Uranus 22 (Francisco)</td>
+<td width="33%"> <input type="checkbox" name="sel73" value="U023S"> Uranus 23 (Margaret)</td>
+<td width="33%"> <input type="checkbox" name="sel73" value="U024S"> Uranus 24 (Ferdinand)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel73" value="SK23U010"> S/2023 U 1 </td>
+<td width="33%"> </td>
+<td width="33%"> </td>
+</tr>
+</table>
+<p><input type="radio" name="sel1" VALUE="4A"> <b>All Neptunian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="4U"> <b>All unnumbered Neptunian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="4N"> <b>All numbered Neptunian outer irregular satellites</b>
+<p><input type="radio" name="sel1" VALUE="4"> <b>Just the following Neptunian outer irregular satellites</b>
+<p>
+<table style="width:100%">
+<tr>
+<td width="33%"> <input type="checkbox" name="sel74" value="N002S"> Neptune 2 (Nereid)</td>
+<td width="33%"> <input type="checkbox" name="sel74" value="N009S"> Neptune 9 (Halimede)</td>
+<td width="33%"> <input type="checkbox" name="sel74" value="N010S"> Neptune 10 (Psamathe)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel74" value="N011S"> Neptune 11 (Sao)</td>
+<td width="33%"> <input type="checkbox" name="sel74" value="N012S"> Neptune 12 (Laomedeia)</td>
+<td width="33%"> <input type="checkbox" name="sel74" value="N013S"> Neptune 13 (Neso)</td>
+</tr>
+<tr>
+<td width="33%"> <input type="checkbox" name="sel74" value="SK02N050"> S/2002 N 5 </td>
+<td width="33%"> <input type="checkbox" name="sel74" value="SK21N010"> S/2021 N 1 </td>
+<td width="33%"> </td>
+</tr>
+</table>
+<hr>
+<center>
+<h2>Output Format(s) Required</h2>
+<p>  I require <input type="checkbox" name="sel3" VALUE="1" CHECKED> Ephemerides
+<p>  I require <input type="checkbox" name="sel4" VALUE="1"> Orbital Elements
+  <br> either <input type="radio" name="sel9" VALUE="8" CHECKED> Multi-line format
+    or  <input type="radio" name="sel9" VALUE="1"> One-line format
+  <br>Please <input type="checkbox" name="selr" VALUE="1"> Show residual blocks
+</center>
+<p><hr><p>
+<center><input type=submit value=" Get Information "> <input type=reset value=" Reset form "><p></center>
+<p><hr><center>
+<h2>Ephemeris Options</h2>
+The desired start date for the ephemerides should be entered
+in YYYY MM DD format (e.g., 2004 July 2 = 2004 07 02).  The default is the most recent 0h UT hour.<p>
+<p>Start date: <input name="d" maxlength=20 size=20 VALUE="">  Number of dates to output <input name="l" maxlength=3 size=3 VALUE="">
+<p>Ephemeris interval: <input name="i" maxlength=3 size=3 VALUE="">  Ephemeris
+units: <input type="radio" name="u" value="d" CHECKED> days  <input type="radio" name="u" value="h"> hours  <input type="radio" name="u" value="m"> minutes  <input type="radio" name="u" value="s"> seconds
+<p><a href="/iau/lists/ObsCodes.html">Observatory code</a>: <input name="c" maxlength=3 size=3 VALUE="">
+<p>Display positions in: <input type="radio" name="raty" value="a"> truncated sexagesimal or
+                      <input type="radio" name="raty" value="h" CHECKED> full sexagesimal or
+                      <input type="radio" name="raty" value="d"> decimal units
+<p><input type="radio" name="s" value="t" CHECKED> Total motion and direction
+<br><input type="radio" name="s" value="c"> Separate R.A. and Decl. coordinate motions
+<br><input type="radio" name="s" value="s"> Separate R.A. and Decl. sky motions
+<br>Display motions as: <input type="radio" name="m" VALUE="s"> "/sec  <input type="radio" name="m" VALUE="m" CHECKED> "/min  <input type="radio" name="m" VALUE="h"> "/hr  <input type="radio" name="m" VALUE="d"> &#176;/day
+</center><p><hr><p>
+<center><input type=submit value=" Get Information "> <input type=reset value=" Reset form "><p></center>
+</form>
+<!-- Body postamble -->
+      </div>
+    </div>
+  </div>
+<!-- Body postamble -->
+<!-- cf. body-top.inc for the opening tags -->
+      </div>  <!-- closes #main -->
+    </div>    <!-- closes .w1 -->
+  </div>      <!-- closes #wrapper -->
+
+  <!-- footer -->
+  <footer id="footer">
+    <div class="holder">
+      <nav class="nav" style="padding-top:20px;">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="https://mpc-service.atlassian.net/servicedesk/customer/portals">Helpdesk</a></li>
+        </ul>
+      </nav>
+
+      <a href="https://www.cfa.harvard.edu">
+        <img
+          src="/images/CfA_Logo_Vertical_CMYK.png"
+          alt="Center for Astrophysics | Harvard &amp; Smithsonian"
+          width="110" height="47"
+          style="padding-top:10px;"
+        >
+      </a>
+      <div class="copy" style="padding-top:20px; padding-bottom:20px;">
+        The Minor Planet Center is hosted by the Center for Astrophysics | Harvard &amp; Smithsonian.
+        <center>The Minor Planet Center is funded by NASA.</center>
+      </div>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+    $(window).on('load', (function() {
+      $("table").tablesorter();
+    }));
+  </script>
+
+  <script type="text/javascript">
+    var _tag=new WebTrends();
+    _tag.dcsGetId();
+    _tag.dcsCollect();
+  </script>
+
+  <noscript>
+    <div>
+      <img alt="DCSIMG" id="DCSIMG" width="1" height="1"
+        src="//logs1.smithsonian.museum/dcsa7yzrmbdzpxzrosrn4tyep_5i1d/njs.gif?dcsuri=/nojavascript&amp;WT.js=No&amp;WT.tv=9.4.0&amp;dcssip=www.minorplanetcenter.net"/>
+    </div>
+  </noscript>
+</body>
+
+
+</html>

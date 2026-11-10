@@ -2,9 +2,13 @@ import * as THREE from 'three/webgpu';
 
 import { ORBITAL_ELEMENTS } from '../data/elements.js';
 import { SUN, SOLAR_BODIES, MOON } from '../data/bodies.js';
-import { createPlanet, disposePlanet, planetTextureBytes } from './planet.js';
+import { createPlanet, disposePlanet, planetTextureBytes, poleToScene } from './planet.js';
 import { createSun } from './sun.js';
 import { createAsteroidBelt } from './asteroid-belt.js';
+import { createSatellites } from './satellites.js';
+import { createComets } from './comets.js';
+import moonCatalog from '../data/catalog/moons.json';
+import { satelliteOrbit } from '../data/scale.js';
 import { resolveTextureLevel } from '../quality.js';
 import {
   centuriesSinceJ2000,
@@ -29,6 +33,9 @@ import {
  */
 
 const BASE_LEVEL = '2k';
+const UP = new THREE.Vector3(0, 1, 0);
+const SUN_POLE_QUAT = new THREE.Quaternion().setFromUnitVectors(UP, poleToScene(SUN.pole).normalize());
+const SUN_SPIN_QUAT = new THREE.Quaternion();
 
 function compress(vec, scale) {
   const r = Math.hypot(vec.x, vec.y, vec.z);
@@ -75,17 +82,25 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
       sunDirection: new THREE.Vector3(1, 0, 0),
       level: BASE_LEVEL,
     });
+    const anchor = new THREE.Group();
+    const tilt = new THREE.Group();
+    if (body.pole) tilt.quaternion.setFromUnitVectors(UP, poleToScene(body.pole).normalize());
+    else tilt.rotation.z = THREE.MathUtils.degToRad(body.axialTilt ?? 0);
+    anchor.add(tilt);
+    // createPlanet owns the visual tilt; the persistent skeleton owns satellite tilt.
     visual.group.scale.setScalar(radius);
     visual.group.name = `${body.id}-group`;
 
-    root.add(visual.group);
+    anchor.add(visual.group);
+    root.add(anchor);
     planets.push({
       id: body.id,
       label: body.nameZh,
       body,
       el,
       radius,
-      group: visual.group,
+      group: anchor,
+      tilt,
       planet: visual,
       level: visual.level,
     });
@@ -121,12 +136,6 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
 
   // ------------------------------------------------------------------ moon
 
-  // The real Earth–Moon distance is 0.00257 AU, which at this compression is
-  // far below one pixel. Satellites are always drawn at an exaggerated orbit
-  // radius; 5 Earth radii keeps the pair readable without swallowing Mercury's
-  // orbit.
-  const MOON_ORBIT_RADII = 5;
-
   const earthEntry = planets.find((p) => p.body.id === 'earth');
   // Satellites keep their true size relative to the parent instead of using the
   // planet radius curve, which deliberately exaggerates small bodies.
@@ -143,12 +152,13 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
   });
   moon.group.scale.setScalar(moonRadius);
   moon.group.name = 'moon-group';
-  root.add(moon.group);
+  // The lunar inclination is relative to the ecliptic, so do not use earthEntry.tilt.
+  (earthEntry?.group ?? root).add(moon.group);
 
   const moonEntry = {
     id: 'moon',
     label: MOON.nameZh,
-    body: MOON,
+    body: { ...MOON, ...moonCatalog.find((m) => m.parent === 'earth') },
     group: moon.group,
     planet: moon,
     radius: moonRadius,
@@ -156,13 +166,38 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
     el: null,
   };
 
+  const satellites = createSatellites({ planets, scale, moonEntry, clock });
+
+  // A fixed-pixel marker keeps sub-pixel planets visible from the overview.
+  const markerCanvas = document.createElement('canvas');
+  markerCanvas.width = markerCanvas.height = 64;
+  const markerContext = markerCanvas.getContext('2d');
+  const gradient = markerContext.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gradient.addColorStop(0, 'rgba(255,255,255,1)');
+  gradient.addColorStop(3.2 / 7, 'rgba(255,255,255,1)');
+  gradient.addColorStop(3.2 / 7 + 0.001, 'rgba(255,255,255,0.25)');
+  gradient.addColorStop(1, 'rgba(255,255,255,0)');
+  markerContext.fillStyle = gradient;
+  markerContext.fillRect(0, 0, 64, 64);
+  const markerMap = new THREE.CanvasTexture(markerCanvas);
+  const markers = planets.map((entry) => {
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: markerMap, color: entry.body.color, blending: THREE.AdditiveBlending,
+      transparent: true, depthWrite: false,
+    }));
+    entry.group.add(sprite);
+    return { entry, sprite };
+  });
+
   /** Everything that carries a texture level. */
   const lodTargets = [...planets, moonEntry];
 
   // --------------------------------------------------------- asteroid belt
 
-  const belt = createAsteroidBelt({ scale });
+  const belt = createAsteroidBelt({ scale, clock });
   root.add(belt);
+  const comets = createComets({ scale, clock });
+  root.add(comets.root);
 
   // ---------------------------------------------------------------- layout
 
@@ -191,17 +226,21 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
       const degrees = 218.3164477 + 481267.88123421 * T;
       moonAngle = THREE.MathUtils.degToRad(degrees % 360);
 
-      const d = MOON_ORBIT_RADII * earthEntry.radius;
+      const moonData = moonEntry.body;
+      const mapped = satelliteOrbit(moonData.aKm / earthEntry.body.radiusKm) * earthEntry.radius;
+      const earthOrbit = scale.orbit(1);
+      const minGap = Math.min(Math.abs(earthOrbit - scale.orbit(0.72333566)), Math.abs(scale.orbit(1.52371034) - earthOrbit));
+      const d = Math.min(mapped, 0.45 * minGap);
       const e = earthEntry.group.position;
 
       // 5.145° inclination to the ecliptic, applied as a tilt about the x axis.
       const inc = THREE.MathUtils.degToRad(5.145);
       const sinA = Math.sin(moonAngle);
 
-      moon.group.position.set(
-        e.x + Math.cos(moonAngle) * d,
-        e.y + sinA * d * Math.sin(inc),
-        e.z - sinA * d * Math.cos(inc),
+      moonEntry.group.position.set(
+        Math.cos(moonAngle) * d,
+        sinA * d * Math.sin(inc),
+        -sinA * d * Math.cos(inc),
       );
 
       // Tidally locked: the near side always faces the Earth.
@@ -232,16 +271,17 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
         level: target,
       });
 
-      next.group.scale.copy(entry.group.scale);
-      next.group.position.copy(entry.group.position);
+      next.group.scale.copy(entry.planet.group.scale);
+      next.group.position.copy(entry.planet.group.position);
       next.globe.rotation.copy(entry.planet.globe.rotation);
-      next.group.name = entry.group.name;
+      next.group.name = entry.planet.group.name;
 
-      root.remove(entry.group);
+      const parent = entry.planet.group.parent;
+      parent.remove(entry.planet.group);
       disposePlanet(entry.planet);
-      root.add(next.group);
+      parent.add(next.group);
 
-      entry.group = next.group;
+      if (entry === moonEntry) entry.group = next.group;
       entry.planet = next;
       entry.level = next.level;
     } finally {
@@ -279,7 +319,7 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
       if (entry.pending) continue;
 
       const native = resolveTextureLevel(tier.key, entry.body.textureLevel ?? '8k');
-      const dist = camPos.distanceTo(entry.group.position) / entry.radius;
+      const dist = camPos.distanceTo(entry.group.getWorldPosition(new THREE.Vector3())) / entry.radius;
 
       if (dist < LOD_UPGRADE && entry.level !== native) {
         setLevel(entry, native);
@@ -295,21 +335,40 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
     clock.update(dt);
 
     // The sun's glow is a camera-facing quad.
-    sun.userData.glow?.quaternion.copy(camera.quaternion);
+    const glow = sun.userData.glow;
+    const sunPeriodDays = Math.abs(SUN.rotationHours) / 24;
+    const sunSpin = Math.PI * 2 * ((clock.julianDate / sunPeriodDays) % 1);
+    sun.quaternion.copy(SUN_POLE_QUAT).multiply(SUN_SPIN_QUAT.setFromAxisAngle(UP, sunSpin));
+    glow.quaternion.copy(sun.quaternion).invert().multiply(camera.quaternion);
+    // Preserve the overview glow; reduce it smoothly for close-ups (solar radii).
+    const GLOW_NEAR_RADII = 6;
+    const GLOW_FAR_RADII = 15;
+    const GLOW_NEAR_FACTOR = 0.20;
+    const distance = camera.position.distanceTo(sun.position) / sunRadius;
+    const blend = THREE.MathUtils.smoothstep(distance, GLOW_NEAR_RADII, GLOW_FAR_RADII);
+    glow.userData.strength.value = SUN.features.glow.strength * THREE.MathUtils.lerp(GLOW_NEAR_FACTOR, 1, blend);
+    const farGlow = THREE.MathUtils.smoothstep(camera.position.distanceTo(sun.position), 400, 800);
+    glow.scale.setScalar(THREE.MathUtils.lerp(1, 4.5 / 2.4, farGlow));
+    belt.userData.update(dt, camera);
 
     layout(centuriesSinceJ2000(clock.julianDate));
-
-    // The belt rotates as one body at the mean motion of a 4.6-year orbit.
-    // Individual rocks carrying their own Kepler rate would need 7000 matrix
-    // updates per frame for an effect that is invisible at any real zoom.
-    const years = (clock.julianDate - 2451545.0) / 365.25;
-    belt.rotation.y = -(years / 4.6) * Math.PI * 2;
-
-    for (const entry of planets) {
-      entry.planet.update(dt, camera, entry.sunDir);
+    satellites.update();
+    const viewHeight = Math.max(1, window.innerHeight);
+    for (const { entry, sprite } of markers) {
+      const distance = camera.position.distanceTo(entry.group.position);
+      const unitsPerPixel = 2 * distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) / viewHeight;
+      sprite.visible = entry.radius / unitsPerPixel < 1.2;
+      sprite.scale.setScalar(unitsPerPixel * 7);
     }
 
-    moonEntry.planet.update(dt, camera, moonSunDir);
+    // Each asteroid retains its own propagated orbit; comets use perihelion elements.
+    comets.update();
+
+    for (const entry of planets) {
+      entry.planet.update(dt, camera, entry.sunDir, clock.julianDate);
+    }
+
+    moonEntry.planet.update(0, camera, moonSunDir);
 
     updateLod(dt, camera);
   }
@@ -333,15 +392,20 @@ export async function createSolarSystem({ tier, anisotropy, clock, scale }) {
     orbitLines,
     update,
     focus,
+    selectSatellite(id) { satellites.select(id); comets.select(id); },
     textureBytes,
+    counts: { moons: satellites.focusables.length, asteroids: belt.userData.count, comets: comets.focusables.length },
+    asteroids: belt,
+    planet: (id) => planets.find((p) => p.id === id)?.group,
     /** Everything the UI can select, in a uniform shape. */
     focusables: [
-      { id: 'sun', label: SUN.nameZh, body: SUN, group: sun, radius: sunRadius, el: null },
+      { id: 'sun', label: SUN.nameZh, body: SUN, group: sun, radius: sunRadius, el: null, level: sun.userData.level },
       ...planets,
-      moonEntry,
+      ...satellites.focusables,
+      ...comets.focusables,
     ],
     /** Farthest orbit radius in display units, for framing the camera. */
-    extent: scale.orbit(30.07),
+    extent: scale.orbit(39.59 * (1 + 0.2518)),
     /** Per-body LOD state, for debugging and the automated tests. */
     lodState: () =>
       planets.map((e) => ({

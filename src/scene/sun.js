@@ -67,7 +67,7 @@ export async function createSun({ spec, tier, anisotropy }) {
       .mul(flow)
       .mul(limb),
     vec3(1.0),
-    0.42,
+    0.25,
   );
 
   const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 48), material);

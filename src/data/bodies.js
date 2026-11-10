@@ -6,7 +6,10 @@
  * renderer turns these numbers into geometry.
  *
  * radiusKm      mean radius, used by the radius compression curve
- * rotationHours sidereal rotation period, sign carries the direction
+ * rotationHours signed sidereal rotation period
+ * pole IAU north pole [right ascension, declination] in ICRF/J2000 degrees;
+ *      determines rendering orientation, while axialTilt remains an informational value
+ * w0 IAU prime meridian [degrees at J2000, degrees per day]
  * axialTilt     obliquity in degrees, 0 = axis aligned with ecliptic north
  * textures      filenames inside textures/<level>/<id>/
  * textureLevel  highest level the *source material* supports. Uranus and
@@ -23,12 +26,14 @@ export const SUN = {
   radiusKm: 696340,
   rotationHours: 609.12,
   axialTilt: 7.25,
+  pole: [286.13, 63.87],
+  w0: [84.176, 14.1844],
   color: '#ffcc66',
   textures: { day: 'day.jpg' },
   textureLevel: '4k',
   features: {
     surface: { tint: [1.02, 0.94, 0.86], flow: 0.05, contrast: 0.14 },
-    glow: { scale: 3.4, strength: 0.85 },
+    glow: { scale: 2.4, strength: 0.85 },
   },
 };
 
@@ -39,6 +44,8 @@ export const MERCURY = {
   radiusKm: 2439.7,
   rotationHours: 1407.6,
   axialTilt: 0.034,
+  pole: [281.0103, 61.4155],
+  w0: [329.5988, 6.1385108],
   color: '#8c8279',
   textures: { day: 'day.jpg' },
   textureLevel: '8k',
@@ -52,6 +59,8 @@ export const VENUS = {
   radiusKm: 6051.8,
   rotationHours: -5832.5,
   axialTilt: 177.36,
+  pole: [272.76, 67.16],
+  w0: [160.20, -1.4813688],
   color: '#e0c196',
   textures: { day: 'day.jpg' },
   textureLevel: '4k',
@@ -69,6 +78,8 @@ export const EARTH = {
   radiusKm: 6371,
   rotationHours: 23.9345,
   axialTilt: 23.44,
+  pole: [0, 90],
+  w0: [190.147, 360.9856235],
   color: '#4f7fb5',
 
   textures: {
@@ -88,10 +99,6 @@ export const EARTH = {
     roughness: { min: 0.32, max: 0.95 },
   },
 
-  // Radians per second at the default time scale. Replaced by real rotation
-  // periods once sim/clock.js drives them.
-  spinSpeed: 0.02,
-  cloudDrift: 0.028,
 };
 
 export const MARS = {
@@ -101,6 +108,8 @@ export const MARS = {
   radiusKm: 3389.5,
   rotationHours: 24.6229,
   axialTilt: 25.19,
+  pole: [317.6813, 52.8869],
+  w0: [176.049, 350.891982443297],
   color: '#c1440e',
   textures: { day: 'day.jpg' },
   textureLevel: '8k',
@@ -117,6 +126,8 @@ export const JUPITER = {
   radiusKm: 69911,
   rotationHours: 9.925,
   axialTilt: 3.13,
+  pole: [268.056595, 64.495303],
+  w0: [284.95, 870.536],
   color: '#d8ca9d',
   textures: { day: 'day.jpg' },
   textureLevel: '4k',
@@ -130,6 +141,8 @@ export const SATURN = {
   radiusKm: 58232,
   rotationHours: 10.656,
   axialTilt: 26.73,
+  pole: [40.589, 83.537],
+  w0: [38.90, 810.7939024],
   color: '#ead6b8',
   textures: { day: 'day.jpg', ring: 'ring.png' },
   textureLevel: '4k',
@@ -145,6 +158,8 @@ export const URANUS = {
   radiusKm: 25362,
   rotationHours: -17.24,
   axialTilt: 97.77,
+  pole: [257.311, -15.175],
+  w0: [203.81, -501.1600928],
   color: '#b5e3e3',
   textures: { day: 'day.jpg' },
   textureLevel: '2k',
@@ -165,6 +180,8 @@ export const NEPTUNE = {
   radiusKm: 24622,
   rotationHours: 16.11,
   axialTilt: 28.32,
+  pole: [299.36, 43.46],
+  w0: [253.18, 536.3128492],
   color: '#4b70dd',
   textures: { day: 'day.jpg' },
   textureLevel: '2k',
@@ -188,6 +205,8 @@ export const MOON = {
   radiusKm: 1737.4,
   rotationHours: 655.7, // tidally locked: one rotation per orbit
   axialTilt: 6.68,
+  pole: [269.9949, 66.5392],
+  w0: [38.3213, 13.17635815],
   color: '#bdbdbd',
   textures: { day: 'day.jpg' },
   textureLevel: '8k',
@@ -195,6 +214,12 @@ export const MOON = {
 };
 
 /** Ordered outward from the Sun, matching ORBITAL_ELEMENTS. */
+export const PLUTO = {
+  id: 'pluto', name: 'Pluto', nameZh: '冥王星', radiusKm: 1188.3,
+  rotationHours: -153.2928, axialTilt: 122.53, pole: [132.993, -6.163], w0: [302.695, 56.3625225], color: '#c7afa0',
+  textures: {}, textureLevel: '2k', features: { procedural: 'pluto' },
+};
+
 export const SOLAR_BODIES = [  MERCURY,
   VENUS,
   EARTH,
@@ -203,6 +228,7 @@ export const SOLAR_BODIES = [  MERCURY,
   SATURN,
   URANUS,
   NEPTUNE,
+  PLUTO,
 ];
 
 export const BODIES = SOLAR_BODIES;

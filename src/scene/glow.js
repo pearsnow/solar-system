@@ -29,6 +29,7 @@ export function createGlow({ color = '#ff9d3c', scale = 4, strength = 1, power =
   material.outputNode = vec4(uColor, intensity);
 
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(scale * 2, scale * 2), material);
+  mesh.userData.strength = uStrength;
   mesh.name = 'glow';
   mesh.frustumCulled = false;
   mesh.renderOrder = -1;

@@ -1,6 +1,6 @@
 # 素材与许可
 
-本仓库包含两类内容，许可不同，请分别引用。
+本仓库包含三类内容，许可不同，请分别引用。
 
 ## 代码
 
@@ -51,9 +51,26 @@
 天王星和海王星的表面细节本身是**虚构**的（JPL 对大行星表面图明确标注 fictional，
 真实观测只有低分辨率云带），这两颗星的纹理由程序化条带补充，不冒充真实测绘数据。
 
+## 程序化生成的贴图（v2）
+
+以下内容**不是实拍或公开影像**，由代码生成，README 中同样如实标注：
+
+| 内容 | 生成方式 |
+|---|---|
+| 冥王星表面 | 暖米色底 + 噪声斑驳 + Sputnik Planitia 心形亮区的着色器 |
+| 大卫星表面（月球除外） | `src/scene/moon-texture.js` 在 canvas 上用三维值噪声生成，按天体调色 |
+| 小行星带尘埃环 | 半透明环面 + 径向渐变 alpha |
+| 彗星彗尾 | 两张面向相机的加法混合贴图 |
+
 ## 天文数据
 
-轨道根数取自 JPL 的 *Keplerian Elements for Approximate Positions of the Major Planets*
-（E. M. Standish, 表 1，J2000 黄道）。这是 NASA 公开数据，无使用限制。
+| 数据 | 来源 | 许可 |
+|---|---|---|
+| 行星轨道根数 | JPL *Keplerian Elements for Approximate Positions of the Major Planets*（E. M. Standish，表 1，J2000 黄道） | NASA 公开数据 |
+| 冥王星瞬时根数 | JPL SBDB | NASA 公开数据 |
+| 2866 颗主带小行星 | JPL SBDB `sbdb_query.api`，`sb-class=MBA`，直径 ≥ 15 km | NASA 公开数据 |
+| 41 颗彗星 | JPL SBDB `sbdb.api` | NASA 公开数据 |
+| 210 颗卫星轨道要素 | MPC 卫星表 + JPL/IAU 已发表数值 | 公开数据 |
+| 精度验证对照组 | JPL Horizons，缓存于 `tools/fixtures/horizons.json` | NASA 公开数据 |
 
-精度验证脚本 `tools/verify-orbits.mjs` 的对照数据由 JPL Horizons 生成。
+这些是事实性数据，NASA 不主张版权；本项目仅做了格式转换与单位归一。

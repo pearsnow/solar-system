@@ -4,7 +4,7 @@ import { EARTH } from './data/bodies.js';
 import { resolveScale } from './data/scale.js';
 import { SimClock, SPEED_PRESETS } from './sim/clock.js';
 import { CameraRig } from './sim/camera-rig.js';
-import { centuriesSinceJ2000, heliocentricPosition } from './sim/orbit.js';
+import { centuriesSinceJ2000, heliocentricPosition, cometPosition } from './sim/orbit.js';
 import { createPlanet, planetTextureBytes } from './scene/planet.js';
 import { createSolarSystem } from './scene/solar-system.js';
 import { createStarfield } from './scene/starfield.js';
@@ -36,6 +36,7 @@ async function main() {
     canvas,
     antialias: true,
     forceWebGL: params.has('webgl'),
+    reversedDepthBuffer: true,
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -89,8 +90,13 @@ async function main() {
     });
 
     let body;
+    let earthJd = 2461350.5;
+    // Earth view has no time-bar UI; its spacebar state is local to this view.
+    let playing = true;
 
     return {
+      togglePlay() { playing = !playing; },
+      get playing() { return playing; },
       camera,
       controls,
       ready: (async () => {
@@ -98,10 +104,10 @@ async function main() {
         scene.add(body.group);
       })(),
       update(dt, active) {
-        if (body) body.update(active.playing ? dt : 0, camera, SUN_DIRECTION);
+        if (playing) earthJd += dt * 0.0831;
+        if (body) body.update(dt, camera, SUN_DIRECTION, earthJd);
       },
       memory: () => (body ? planetTextureBytes(body) : 0),
-      playing: true,
       hud: '',
     };
   }
@@ -110,17 +116,23 @@ async function main() {
     const camera = new THREE.PerspectiveCamera(
       40,
       window.innerWidth / window.innerHeight,
-      0.5,
-      6000,
+      0.01,
+      backend === 'WebGL2' ? 40000 : 100000,
     );
-    camera.position.set(0, 200, 380);
-
     const scale = resolveScale(params.get('scale'));
+    // `true` is linear, so framing is arithmetic, not taste. Pluto's aphelion is
+    // 39.5 AU = 2369 units. A tilted circle does not project to a circle: its near
+    // side is closer to the camera and therefore magnified, so the binding case
+    // is not d·tan(fov/2) but max over θ of R·cosθ / (d − R·cosφ·sinθ). At d=5000
+    // and 26° elevation that peaks at 0.52 against a 0.582 half-extent — an 11%
+    // margin. Framing at 4400 puts the outer orbit through the frame edge.
+    if (scale.id === 'true') camera.position.set(0, 2200, 4490);
+    else camera.position.set(0, 200, 380);
     const clock = new SimClock(new Date());
 
     const controls = createControls(camera, renderer.domElement, {
-      minDistance: 2,
-      maxDistance: 2000,
+      minDistance: 0.05,
+      maxDistance: 30000,
     });
 
     const rig = new CameraRig({
@@ -134,9 +146,42 @@ async function main() {
     let selectedId = null;
     let shownLevel = null;
     let lastDate = '';
+    let distanceTimer = 0;
+
+    function togglePlay() {
+      clock.playing = !clock.playing;
+      ui?.setPlaying(clock.playing);
+    }
+
+    function updateDistance(focusable) {
+      if (focusable?.body.kind === 'comet') {
+        ui.setDistance(`${cometPosition(focusable.body, clock.julianDate).r.toFixed(3)} AU`);
+        return;
+      }
+      if (!focusable?.el) return;
+      const r = heliocentricPosition(focusable.el, centuriesSinceJ2000(clock.julianDate)).r;
+      ui.setDistance(`${r.toFixed(3)} AU`);
+    }
 
     function buildInfo(focusable) {
       const spec = focusable.body;
+      if (spec.kind === 'comet') {
+        const period = spec.e < 1 ? `${Math.pow(spec.q / (1 - spec.e), 1.5).toFixed(2)} 年` : '非周期/双曲线';
+        return { nameZh: spec.nameZh || spec.name, name: spec.name, sub: spec.name, lines: [
+          ['近日点距离', `${spec.q.toFixed(4)} AU`], ['偏心率', `${spec.e.toFixed(6)}`],
+          ['轨道倾角', `${spec.i.toFixed(2)}°`], ['周期', period],
+          ['当前日心距', `${cometPosition(spec, clock.julianDate).r.toFixed(3)} AU`],
+        ] };
+      }
+      if (spec.parent) {
+        const parent = system.focusables.find((f) => f.id === spec.parent);
+        return { nameZh: spec.nameZh, name: spec.name, sub: spec.name, lines: [
+          ['半径', `${spec.radiusKm.toLocaleString('en-US')} km`],
+          ['轨道半长轴', `${spec.aKm.toLocaleString('en-US')} km`],
+          ['周期', `${spec.periodDays} 天`], ['偏心率', `${spec.e}`],
+          ['倾角', `${spec.i}°`], ['母星', parent?.label ?? spec.parent],
+        ] };
+      }
       const lines = [
         ['半径', `${spec.radiusKm.toLocaleString('en-US')} km`],
         ['自转周期', formatHours(spec.rotationHours)],
@@ -144,7 +189,7 @@ async function main() {
       ];
 
       if (focusable.el) {
-        const a = focusable.el.a[0];
+        const a = Array.isArray(focusable.el.a) ? focusable.el.a[0] : focusable.el.a;
         const r = heliocentricPosition(
           focusable.el,
           centuriesSinceJ2000(clock.julianDate),
@@ -152,8 +197,8 @@ async function main() {
         lines.push(['轨道半长轴', `${a.toFixed(3)} AU`]);
         lines.push(['公转周期', `${Math.pow(a, 1.5).toFixed(2)} 年`]);
         lines.push(['当前日心距', `${r.toFixed(3)} AU`]);
-        lines.push(['贴图档位', focusable.level?.toUpperCase() ?? '—']);
       }
+      lines.push(['贴图档位', focusable.level?.toUpperCase() ?? '—']);
 
       return {
         nameZh: spec.nameZh,
@@ -167,6 +212,7 @@ async function main() {
       if (!system || !ui) return;
 
       if (!id) {
+        system.selectSatellite(null);
         selectedId = null;
         rig.reset();
         ui.hideInfo();
@@ -178,8 +224,10 @@ async function main() {
       if (!focusable) return;
 
       selectedId = id;
+      system.selectSatellite(id);
       rig.focus(focusable);
       ui.showInfo(buildInfo(focusable));
+      ui.setSatellites(system.focusables.filter((f) => f.body.parent === id));
       ui.markSelected(id);
       shownLevel = focusable.level ?? null;
     }
@@ -210,6 +258,8 @@ async function main() {
     return {
       camera,
       controls,
+      togglePlay,
+      get playing() { return clock.playing; },
       ready: (async () => {
         system = await createSolarSystem({ tier, anisotropy, clock, scale });
         scene.add(system.root);
@@ -229,9 +279,7 @@ async function main() {
             select,
             home: () => select(null),
             clear: () => select(null),
-            togglePlay: (playing) => {
-              clock.playing = playing;
-            },
+            togglePlay,
             speed: (index) => {
               clock.daysPerSecond = SPEED_PRESETS[index].daysPerSecond;
             },
@@ -242,13 +290,22 @@ async function main() {
               clock.setDate(new Date(`${iso}T00:00:00`));
               if (selectedId) {
                 const focusable = system.focusables.find((f) => f.id === selectedId);
-                if (focusable) ui.showInfo(buildInfo(focusable));
+                updateDistance(focusable);
               }
             },
           },
         });
+        ui.setPlaying(clock.playing);
 
-        ui.setBodies(system.focusables.map((f) => ({ id: f.id, label: f.label })));
+        ui.setBodies(system.focusables.filter((f) => !f.body.parent && f.body.kind !== 'comet')
+          .map((f) => ({
+            id: f.id,
+            label: f.label,
+            moons: system.focusables.filter((m) => m.body.parent === f.id)
+              .sort((a, b) => (a.body.aKm ?? 0) - (b.body.aKm ?? 0))
+              .map((m) => ({ id: m.id, label: m.label })),
+          })));
+        ui.setComets(system.focusables.filter((f) => f.body.kind === 'comet'));
         ui.setDate(clock.isoDate);
 
         // ?look=... is still honoured, now through the same code path the UI uses.
@@ -262,13 +319,19 @@ async function main() {
       update(dt, active) {
         if (!system) return;
 
-        system.update(active.playing ? dt : 0, camera);
-        rig.update(active.playing ? dt : 0);
+        system.update(dt, camera);
+        rig.update(dt);
         active.date = clock.isoDate;
 
         if (ui && clock.isoDate !== lastDate) {
           lastDate = clock.isoDate;
           ui.setDate(lastDate);
+        }
+
+        distanceTimer += dt;
+        if (distanceTimer >= 0.5) {
+          distanceTimer = 0;
+          if (ui && selectedId) updateDistance(system.focusables.find((f) => f.id === selectedId));
         }
 
         // The LOD upgrade lands a beat after the flight starts; refresh the
@@ -282,8 +345,10 @@ async function main() {
         }
       },
       memory: () => (system ? system.textureBytes() : 0),
-      playing: true,
-      hud: `${scale.label} · ${scale.note}`,
+      // The note is a full sentence; on the HUD it used to run under the planet
+      // and collide with the controls hint. Label only, sentence in the tooltip.
+      hud: scale.label,
+      hudNote: scale.note,
     };
   }
 
@@ -296,7 +361,7 @@ async function main() {
           .trim();
         return cleaned.length > 44 ? `${cleaned.slice(0, 44)}…` : cleaned;
       })()
-    : '未知 GPU';
+    : 'GPU 未知';
 
   const formatBytes = (n) =>
     n > 1024 ** 3 ? `${(n / 1024 ** 3).toFixed(2)} GB` : `${Math.round(n / 1024 ** 2)} MB`;
@@ -305,12 +370,15 @@ async function main() {
     const mem = mode.memory ? ` · 贴图 ${formatBytes(mode.memory())}` : '';
     qualityEl.textContent =
       `${tier.label} · ${backend} · ${gpu}${mode.hud ? ` · ${mode.hud}` : ''}${mem}`;
+    // Everything that did not fit, on hover.
+    qualityEl.title = [mode.hudNote, `贴图上限 ${tier.label}`].filter(Boolean).join(' · ');
   }
 
-  const state = { playing: true, date: '' };
+  const state = { date: '' };
 
   const titleEl = document.getElementById('title');
   if (titleEl) titleEl.textContent = MODE === 'earth' ? 'Earth' : 'Solar System';
+  document.title = `${MODE === 'earth' ? 'Earth' : 'Solar System'} · three.js WebGPU + TSL`;
 
   await mode.ready;
   refreshHud();
@@ -331,7 +399,7 @@ async function main() {
     mode.controls.update();
 
     if (clockEl) {
-      clockEl.textContent = state.date ? `${state.date}${state.playing ? '' : ' · 已暂停'}` : '';
+      clockEl.textContent = state.date ? `${state.date}${mode.playing ? '' : ' · 已暂停'}` : '';
     }
 
     hudTimer += dt;
@@ -350,7 +418,7 @@ async function main() {
   window.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
       event.preventDefault();
-      state.playing = !state.playing;
+      mode.togglePlay();
     }
   });
 

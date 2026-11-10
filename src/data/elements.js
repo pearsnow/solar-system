@@ -18,6 +18,8 @@ export const AU_KM = 149597870.7;
 export const J2000_JD = 2451545.0;
 
 export const ORBITAL_ELEMENTS = [
+  { id: 'pluto', horizonsId: '999', type: 'osculating', a: 39.59, e: 0.2518, i: 17.16,
+    om: 110.30, w: 113.76, ma: 14.53, epoch: 2451545.0, n: 0.00396 },
   {
     id: 'mercury',
     horizonsId: '199',
