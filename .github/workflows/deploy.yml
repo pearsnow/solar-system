@@ -48,3 +48,7 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          # 89 MB of textures takes longer than the action's 10-minute default to
+          # sync when Pages is busy — the v2 deploy hit exactly that wall.
+          timeout: 1800000
